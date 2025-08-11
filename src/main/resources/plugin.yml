@@ -1,0 +1,13 @@
+name: DivineVulcan
+version: '2.0'
+main: me.jetby.divinevulcan.Main
+api-version: '1.13'
+load: POSTWORLD
+authors: [ MrJetby ]
+website: https://dsc.gg/treexstudio
+commands:
+  divinevulcan:
+    aliases:
+      - dv
+      - vulan
+      - dvulcan

@@ -1,0 +1,31 @@
+
+metrics: true
+check-for-update: true
+
+license:
+  key: 'ВСТАВЬТЕ_СЮДА_ВАШУ_ЛИЦЕНЗИЮ'
+
+
+AutoStart:
+  type: TIMER # TIMER / TIMEZONE
+  timer: 3600 # Если в type стоит TIMER то это время в секундах до начала ивента
+  timezone:
+    zone: GMT+4
+    times:
+      - '10:00;default' # Если добавить ;id_вулкана то запустит конкретный вулкан
+      - '12:00' # Случайный вулкан запустится в это время
+
+
+# Placeholders:
+# %divinevulcan_x_<id>% - Координат x
+# %divinevulcan_y_<id>% - Координат y
+# %divinevulcan_z_<id>% - Координат z
+# %divinevulcan_time_to_start% - время до начала ивента в секундах
+# %divinevulcan_time_to_start_string% - время до начала ивента в формате
+formattedTime:
+  show-format: "%weeks% %days% %hours% %minutes% %seconds%"
+  weeks: ["неделя", "недели", "недель"]
+  days: ["день", "дня", "дней"]
+  hours: ["час", "часа", "часов"]
+  minutes: ["минута", "минуты", "минут"]
+  seconds: ["секунда", "секунды", "секунд"]
