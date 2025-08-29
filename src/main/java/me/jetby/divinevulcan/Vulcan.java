@@ -89,7 +89,7 @@ public class Vulcan {
 
     private final Map<String, BossBars> bossBarsMap;
 
-    private static Location spawnLocation;
+    private Location spawnLocation;
     private static BukkitRunnable activationTask;
     private static BukkitRunnable startTask;
     private static BukkitRunnable particleTask;
@@ -106,15 +106,10 @@ public class Vulcan {
         }
         final int[] timeLeft = {duration};
 
-        for (String event : onStartEvents) {
-            plugin.getActions().execute(type, spawnLocation, event
-                    .replace("{world}", spawnLocation.getWorld().getName())
-                    .replace("{x}", String.valueOf(spawnLocation.getBlockX()))
-                    .replace("{y}", String.valueOf(spawnLocation.getBlockY()))
-                    .replace("{z}", String.valueOf(spawnLocation.getBlockZ()))
-            );
+        plugin.getActions().execute(type, spawnLocation, onStartEvents, this);
 
-        }
+        Vulcan vulcan = this;
+
         activationTask = new BukkitRunnable() {
             @Override
             public void run() {
@@ -128,9 +123,7 @@ public class Vulcan {
                 if (isPhase()) {
                     for (Integer moment : phases.keySet()) {
                         if (timeLeft[0]!=moment) continue;
-                        List<String> actions = phases.get(moment);
-                        if (actions.isEmpty()) continue;
-                        for (String action : actions) plugin.getActions().execute(type, spawnLocation, action);
+                        plugin.getActions().execute(type, spawnLocation, phases.get(moment), vulcan);
                     }
                 }
                 timeLeft[0]--;
@@ -166,14 +159,10 @@ public class Vulcan {
         if (region) {
             WGHook.createRegion(spawnLocation, regionSize, flags);
         }
-        for (String cmd : onSpawnEvents) {
-            plugin.getActions().execute(type, spawnLocation, cmd
-                    .replace("{world}", spawnLocation.getWorld().getName())
-                    .replace("{x}", String.valueOf(spawnLocation.getBlockX()))
-                    .replace("{y}", String.valueOf(spawnLocation.getBlockY()))
-                    .replace("{z}", String.valueOf(spawnLocation.getBlockZ()))
-            );
-        }
+
+            plugin.getActions().execute(type, spawnLocation, onSpawnEvents, this);
+
+
         createHologramActivation(timeLeft[0]);
         startParticleEffects(activation);
         startTask = new BukkitRunnable() {
@@ -192,28 +181,23 @@ public class Vulcan {
     }
 
     public void stop() {
-        if (activationTask != null) {
-            activationTask.cancel();
-            activationTask = null;
-        }
-        if (startTask != null) {
-            startTask.cancel();
-            startTask = null;
-        }
+        if (activationTask != null) activationTask.cancel();
+        if (startTask != null) startTask.cancel();
         if (particleTask != null) particleTask.cancel();
+
+        plugin.getSchematic().undoSchematic(getLocation());
+        clearHologram();
 
         for (String id : bossBarsMap.keySet()) {
             if (!plugin.getBossBar().getDatas().containsKey(id)) continue;
             plugin.getBossBar().deleteBossBar(id);
         }
 
-        plugin.getSchematic().undoSchematic(getLocation(), schemOffsetX, schemOffsetY, schemOffsetZ);
+        plugin.getActions().execute(type, spawnLocation, onEndEvents, this);
 
-        for (String event : onEndEvents) {
-            plugin.getActions().execute(type, spawnLocation, event);
-        }
         removeRegion(spawnLocation);
-        clearHologram();
+
+
         activeVulcans.remove(type, this);
     }
 

@@ -18,23 +18,6 @@ public class LocationGenerator {
 
     private final Random RANDOM = new Random();
 
-    private int getHighestBlock(Chunk chunk, int x, int z, Set<Material> materialSet) {
-        int y = chunk.getChunkSnapshot().getHighestBlockYAt(x, z);
-        if (y <= 0) return -1;
-
-        Material blockType = chunk.getBlock(x, y, z).getType();
-
-        if (materialSet != null && materialSet.contains(blockType)) {
-            if (plugin.getCfg().isDebug()) {
-                Logger.error("[getHighestBlock] запрещённый блок: " + blockType.name() + " на " + chunk.getX() + "," + chunk.getZ() + " локально " + x + "," + z);
-            }
-            return -1;
-        }
-
-        return y;
-    }
-
-
     @Nullable
     public Location findRandomLocation(Vulcan vulcan) {
 
@@ -45,6 +28,8 @@ public class LocationGenerator {
             for (Location location : locationList) {
                 if (location==null) continue;
                 if (!WGHook.isRegionEmpty(vulcan.getRegionSize(), location)) continue;
+                if (!isSuitableFlat(location, vulcan.getRegionSize())) continue;
+
                 return location;
             }
         } else {
@@ -84,8 +69,10 @@ public class LocationGenerator {
                 }
 
                 Block groundBlock = world.getBlockAt(wx, surfaceY, wz);
-                if (groundBlock.getType().equals(Material.GRASS) || groundBlock.getType().equals(Material.TALL_GRASS)) continue;
-                if (groundBlock.isPassable() || groundBlock.getType() == Material.AIR
+                if (groundBlock.getType().equals(Material.GRASS)
+                        || groundBlock.getType().equals(Material.TALL_GRASS)
+                        || groundBlock.getType() == Material.AIR) continue;
+                if (groundBlock.isPassable()
                         || groundBlock.getType() == Material.WATER || groundBlock.getType() == Material.LAVA) {
                     if (plugin.getCfg().isDebug()) {
                         Logger.error("[checkFlatSurface] неподходящий groundBlock: " + groundBlock.getType() + " at " + wx + "," + surfaceY + "," + wz);
@@ -108,7 +95,7 @@ public class LocationGenerator {
         return true;
     }
     public boolean isSuitableFlat(Location center, int radius) {
-        int maxDiff = 0;
+        int maxDiff = 3;
         int requiredClearance = 2;
         return checkFlatSurface(center, radius, maxDiff, requiredClearance);
     }
@@ -147,30 +134,18 @@ public class LocationGenerator {
             int x = RANDOM.nextInt(radius * 2 + 1) - radius;
             int z = RANDOM.nextInt(radius * 2 + 1) - radius;
 
-            int wx = x;
-            int wz = z;
 
-            Chunk chunk = world.getChunkAt(wx >> 4, wz >> 4);
-            int localX = wx & 15;
-            int localZ = wz & 15;
 
-            int y = getHighestBlock(chunk, localX, localZ, materials);
+            int y = world.getHighestBlockYAt(x, z);
 
-            if (y == -1) {
-                if (plugin.getCfg().isDebug()) {
-                    Logger.error("[getRandomLocation] getHighestBlock возвращает -1");
-                }
-                continue;
-            }
+            Material blockType = world.getBlockAt(x, y, z).getType();
 
-            Location location = new Location(world, wx + 0.5, y + 1, wz + 0.5);
+            if (materials != null && materials.contains(blockType)) continue;
 
-            if (!isSuitableFlat(location, regionSize)) {
-                if (plugin.getCfg().isDebug()) {
-                    Logger.error("[getRandomLocation] isSuitableFlat вернул false для " + location);
-                }
-                continue;
-            }
+
+            Location location = new Location(world, x + 0.5, y + 1, z + 0.5);
+
+
 
             if (!WGHook.isRegionEmpty(regionSize, location)) {
                 if (plugin.getCfg().isDebug()) {

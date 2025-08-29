@@ -26,12 +26,9 @@ public class WGHook {
             RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
             RegionManager regions = container.get((BukkitAdapter.adapt(location.getWorld())));
 
-            Location point1 = new Location(location.getWorld(), location.getBlockX() + radius, location.getBlockY() + radius, location.getBlockZ() + radius);
-            Location point2 = new Location(location.getWorld(), location.getBlockX() - radius, location.getBlockY() - radius, location.getBlockZ() - radius);
-
             ProtectedCuboidRegion region = new ProtectedCuboidRegion(UUID.randomUUID() + "_region",
-                    BlockVector3.at(point1.getBlockX(), point1.getBlockY(), point1.getBlockZ()),
-                    BlockVector3.at(point2.getBlockX(), point2.getBlockY(), point2.getBlockZ()));
+                    BlockVector3.at(location.getBlockX() + radius, location.getBlockY() + radius, location.getBlockZ() + radius),
+                    BlockVector3.at(location.getBlockX() - radius, location.getBlockY() - radius, location.getBlockZ() - radius));
 
             Map<String, ProtectedRegion> rg = regions.getRegions();
             List<ProtectedRegion> candidates = new ArrayList<>(rg.values());
@@ -78,8 +75,6 @@ public class WGHook {
     }
     private static void applyAllFlags(ProtectedRegion region, List<String> flags) {
         if (flags == null || flags.isEmpty()) {
-            region.setFlag(Flags.PVP, StateFlag.State.ALLOW);
-            region.setFlag(Flags.DENY_MESSAGE, null);
             return;
         }
 

@@ -277,7 +277,8 @@ public class Vulcans {
                     usePreGeneratedLocations,
                     isPhase,
                     phase,
-                    bossBarsMap
+                    bossBarsMap,
+                    null
             );
 
             vulcans.put(id, vulcan);

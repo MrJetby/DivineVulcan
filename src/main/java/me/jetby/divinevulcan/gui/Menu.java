@@ -4,7 +4,6 @@ import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.divinevulcan.Main;
 import me.jetby.divinevulcan.Vulcan;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -20,7 +19,6 @@ public class Menu extends AdvancedGui {
 
     public Menu(Main plugin) {
         super("DivineVulcan by TreexStudio");
-        var mm = MiniMessage.miniMessage();
 
         int slot = 0;
         for (String type : plugin.getVulcans().getVulcans().keySet()) {
@@ -29,13 +27,13 @@ public class Menu extends AdvancedGui {
                 builder.slots(finalSlot);
 
                 builder.defaultItem(ItemWrapper.builder(Material.BARREL)
-                        .displayName(mm.deserialize("<!i><#FB430A><bold>⭐</bold> <white>Вулкан: <yellow>" + type))
+                        .displayName("<!i><#FB430A><bold>⭐</bold> <white>Вулкан: <yellow>" + type)
                         .lore(List.of(
-                                mm.deserialize("<!i><#FB430A><bold><st>=<#FB4C0E>                                   <st>="),
-                                mm.deserialize(""),
-                                mm.deserialize("<!i> <#FB430A><bold>ЛКМ</bold> <gray>- <white>Настроить вулкан "),
-                                mm.deserialize(""),
-                                mm.deserialize("<!i><#FB430A><bold><st>=<#FB4C0E>                                   <st>=")
+                                "<!i><#FB430A><bold><st>=<#FB4C0E>                                   <st>=",
+                                "",
+                                "<!i> <#FB430A><bold>ЛКМ</bold> <gray>- <white>Настроить вулкан ",
+                                "",
+                                "<!i><#FB430A><bold><st>=<#FB4C0E>                                   <st>="
                                 ))
                         .build());
 

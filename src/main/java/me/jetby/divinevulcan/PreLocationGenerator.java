@@ -80,15 +80,15 @@ public class PreLocationGenerator {
                 player.sendMessage(hex("&aУдачно. "+i));
                 jMenu.getController("pregenerated").get().updateItemWrappers(wrapper -> {
                     wrapper.lore(List.of(
-                            jMenu.getMm().deserialize("<#FB430A><st>=                                   ="),
-                            jMenu.getMm().deserialize("<!i>"+jMenu.checkColor(vulcan.isUsePreGeneratedLocations())+"● <white>Использовать: "+jMenu.check(vulcan.isUsePreGeneratedLocations())),
-                            jMenu.getMm().deserialize(""),
-                            jMenu.getMm().deserialize("<!i><#FB430A><b>●</b> <white>Сгенерировано локаций: <#FB430A>"+getLocationsAmount(vulcan.getType())),
-                            jMenu.getMm().deserialize(""),
-                            jMenu.getMm().deserialize("<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Начать поиск 50 локаций"),
-                            jMenu.getMm().deserialize("<!i><#FB430A><b>ПКМ</b> <gray>- <white>Отменить поиск"),
-                            jMenu.getMm().deserialize("<!i><#FB430A><b>СКМ</b> <gray>- <white>Переключить <green>true/<red>false"),
-                            jMenu.getMm().deserialize("<!i><#FB430A><st>=                                   =")
+                            "<#FB430A><st>=                                   =",
+                            "<!i>"+jMenu.checkColor(vulcan.isUsePreGeneratedLocations())+"● <white>Использовать: "+jMenu.check(vulcan.isUsePreGeneratedLocations()),
+                            "",
+                            "<!i><#FB430A><b>●</b> <white>Сгенерировано локаций: <#FB430A>"+getLocationsAmount(vulcan.getType()),
+                            "",
+                            "<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Начать поиск 50 локаций",
+                            "<!i><#FB430A><b>ПКМ</b> <gray>- <white>Отменить поиск",
+                            "<!i><#FB430A><b>СКМ</b> <gray>- <white>Переключить <green>true/<red>false",
+                            "<!i><#FB430A><st>=                                   ="
                     ));
                 });
         }

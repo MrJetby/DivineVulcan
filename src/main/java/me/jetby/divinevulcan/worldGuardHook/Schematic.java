@@ -31,44 +31,14 @@ public class Schematic {
 
     private final Map<String, EditSession> editSessionMap = new HashMap<>();
 
-    public void pasteSchematic(Location location, String schematicFileName) {
-        File schematicFile = new File(pl.getDataFolder()+"/schematics", schematicFileName);
-        if (!schematicFile.exists()) {
-            Logger.warn("Schematic file not found: " + schematicFileName);
-            return;
-        }
-
-        try (ClipboardReader reader = ClipboardFormats.findByFile(schematicFile).getReader(new FileInputStream(schematicFile))) {
-            Clipboard clipboard = reader.read();
-            World adaptedWorld = BukkitAdapter.adapt(location.getWorld());
-            BlockVector3 to = BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-
-            try (EditSession editSession = pl.getWorldEdit().newEditSession(adaptedWorld)) {
-                editSession.setReorderMode(EditSession.ReorderMode.MULTI_STAGE);
-                Operation operation = new ClipboardHolder(clipboard)
-                        .createPaste(editSession)
-                        .to(to)
-                        .ignoreAirBlocks(false)
-                        .build();
-
-                Operations.complete(operation);
-                editSession.flushSession();
-//                editSessionMap.put(location, editSession);
-            }
-
-        } catch (IOException | com.sk89q.worldedit.WorldEditException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void undoSchematic(Location location, int offsetX, int offsetY, int offsetZ) {
-        Location pasteLoc = location.clone().add(offsetX, offsetY, offsetZ);
-        EditSession session = editSessionMap.remove(makeKey(pasteLoc));
+    public void undoSchematic(Location location) {
+        EditSession session = editSessionMap.get(makeKey(location));
         if (session != null) {
             session.undo(session);
+            editSessionMap.remove(makeKey(location));
             session.close();
         } else {
-            Logger.warn("No edit session to undo for location: " + pasteLoc);
+            Logger.warn("No edit session to undo for LOCATION: " + makeKey(location));
         }
     }
 
@@ -105,7 +75,7 @@ public class Schematic {
             Operations.complete(operation);
             editSession.flushSession();
 
-            editSessionMap.put(makeKey(pasteLoc), editSession);
+            editSessionMap.put(makeKey(location), editSession);
             reader.close();
 
         } catch (IOException | com.sk89q.worldedit.WorldEditException e) {

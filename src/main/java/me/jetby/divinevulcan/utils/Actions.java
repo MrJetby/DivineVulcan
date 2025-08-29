@@ -1,6 +1,7 @@
 package me.jetby.divinevulcan.utils;
 
 import me.jetby.divinevulcan.Main;
+import me.jetby.divinevulcan.Vulcan;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,27 +26,26 @@ public class Actions {
     }
 
 
-    public void execute(String id, Location location, String command) {
-        List<String> commands = new ArrayList<>();
-        commands.add(command);
-        execute(id, location, commands);
+    public void execute(String id, Location location, List<String> commands, Vulcan vulcan) {
+        executeWithDelay(id, location, commands, 0, vulcan);
     }
-
-    public void execute(String id, Location location, List<String> commands) {
-        executeWithDelay(id, location, commands, 0);
-    }
-    private void executeWithDelay(String id, Location location, List<String> commands, int index) {
+    private void executeWithDelay(String id, Location location, List<String> commands, int index, Vulcan vulcan) {
         if (index >= commands.size()) return;
 
         String command = commands.get(index);
         String[] args = command.split(" ");
-        String withoutCMD = command.replace(args[0] + " ", "");
+        String withoutCMD = command
+                .replace(args[0] + " ", "")
+                .replace("{world}", vulcan.getSpawnLocation().getWorld().getName())
+                .replace("{x}", String.valueOf(vulcan.getSpawnLocation().getBlockX()))
+                .replace("{y}", String.valueOf(vulcan.getSpawnLocation().getBlockY()))
+                .replace("{z}", String.valueOf(vulcan.getSpawnLocation().getBlockZ()));
 
         if (args[0].equalsIgnoreCase("[DELAY]")) {
             int delayTicks = Integer.parseInt(args[1]);
 
             Bukkit.getScheduler().runTaskLater(
-                    plugin, () -> executeWithDelay(id, location, commands, index+1), delayTicks
+                    plugin, () -> executeWithDelay(id, location, commands, index+1, vulcan), delayTicks
             );
             return;
         }
@@ -186,7 +186,7 @@ public class Actions {
                 }
                 break;
         }
-        Bukkit.getScheduler().runTask(plugin, ()-> executeWithDelay(id, location, commands, index+1));
+        Bukkit.getScheduler().runTask(plugin, ()-> executeWithDelay(id, location, commands, index+1, vulcan));
     }
 
     private void playSound(Player player, Location location, String raw) {

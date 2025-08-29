@@ -9,27 +9,22 @@ import me.jetby.divinevulcan.Main;
 import me.jetby.divinevulcan.Vulcan;
 import me.jetby.divinevulcan.configurations.Items;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 @Getter
 public class JMenu extends AdvancedGui implements Listener {
 
-    private final MiniMessage mm;
-
     private final Main plugin;
+    
     public JMenu(Player player, Vulcan vulcan, Main plugin, Items items) {
         super("&0&lDivineVulcan");
         this.plugin = plugin;
-        var mm = MiniMessage.miniMessage();
-        this.mm = mm;
 
         if (!plugin.isPluginEnabled()) {
             title("<red>Ошибка лицензии!");
@@ -55,11 +50,11 @@ public class JMenu extends AdvancedGui implements Listener {
 
             controller.updateItemWrappers(itemWrapper -> {
                 itemWrapper.lore(List.of(
-                        mm.deserialize("<!i><#FB430A><st>=                                   ="),
-                        mm.deserialize("<!i>"+checkColor(vulcan.isStaticLocation())+"● <white>Сейчас: "+check(vulcan.isStaticLocation())),
-                        mm.deserialize(""),
-                        mm.deserialize("<!i><#FB430A><b>▶</b> <white>Нажмите чтобы переключить"),
-                        mm.deserialize("<!i><#FB430A><st>=                                   =")
+                        "<!i><#FB430A><st>=                                   =",
+                        "<!i>"+checkColor(vulcan.isStaticLocation())+"● <white>Сейчас: "+check(vulcan.isStaticLocation()),
+                        "",
+                        "<!i><#FB430A><b>▶</b> <white>Нажмите чтобы переключить",
+                        "<!i><#FB430A><st>=                                   ="
                 ));
             });
         };
@@ -73,15 +68,15 @@ public class JMenu extends AdvancedGui implements Listener {
 
             itemWrapper = ItemWrapper
                     .builder(Material.KNOWLEDGE_BOOK)
-                    .displayName(mm.deserialize("<!i><#FB430A><b>⭐</b> <white>Информация"))
+                    .displayName("<!i><#FB430A><b>⭐</b> <white>Информация")
                     .lore(List.of(
-                            mm.deserialize("<!i>"+checkColor(vulcan.isStarted())+"● <white>Ивент запущен: "+check(vulcan.isStarted())),
-                            mm.deserialize("<!i>"+checkColor(vulcan.isActivation())+"● <white>Ивент активируется: "+check(vulcan.isActivation())),
-                            mm.deserialize("<!i><#FB430A><st>=                                   ="),
-                            mm.deserialize("<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Запустить/Остановить ивент"),
-                            mm.deserialize("<!i><#FB430A><b>ПКМ</b> <gray>- <white>Активировать ивент"),
-                            mm.deserialize("<!i><#FB430A><b>СКМ</b> <gray>- <white>Телепорт к ивенту"),
-                            mm.deserialize("<!i><#FB430A><st>=                                   =")
+                            "<!i>"+checkColor(vulcan.isStarted())+"● <white>Ивент запущен: "+check(vulcan.isStarted()),
+                            "<!i>"+checkColor(vulcan.isActivation())+"● <white>Ивент активируется: "+check(vulcan.isActivation()),
+                            "<!i><#FB430A><st>=                                   =",
+                            "<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Запустить/Остановить ивент",
+                            "<!i><#FB430A><b>ПКМ</b> <gray>- <white>Активировать ивент",
+                            "<!i><#FB430A><b>СКМ</b> <gray>- <white>Телепорт к ивенту",
+                            "<!i><#FB430A><st>=                                   ="
                     ))
                     .build();
 
@@ -123,13 +118,13 @@ public class JMenu extends AdvancedGui implements Listener {
 
                         getController("info").get().updateItemWrappers(wrapper -> {
                             wrapper.lore(List.of(
-                                    mm.deserialize("<!i><white>Ивент запущен: "+check(vulcan.isStarted())),
-                                    mm.deserialize("<!i><white>Ивент активируется: "+check(vulcan.isActivation())),
-                                    mm.deserialize("<!i><#FB430A><st>=                                   ="),
-                                    mm.deserialize("<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Запустить/Остановить ивент"),
-                                    mm.deserialize("<!i><#FB430A><b>ПКМ</b> <gray>- <white>Активировать ивент"),
-                                    mm.deserialize("<!i><#FB430A><b>СКМ</b> <gray>- <white>Телепорт к ивенту"),
-                                    mm.deserialize("<!i><#FB430A><st>=                                   =")
+                                    "<!i><white>Ивент запущен: "+check(vulcan.isStarted()),
+                                    "<!i><white>Ивент активируется: "+check(vulcan.isActivation()),
+                                    "<!i><#FB430A><st>=                                   =",
+                                    "<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Запустить/Остановить ивент",
+                                    "<!i><#FB430A><b>ПКМ</b> <gray>- <white>Активировать ивент",
+                                    "<!i><#FB430A><b>СКМ</b> <gray>- <white>Телепорт к ивенту",
+                                    "<!i><#FB430A><st>=                                   ="
                             ));
                         });
                     });
@@ -141,13 +136,13 @@ public class JMenu extends AdvancedGui implements Listener {
 
             itemWrapper = ItemWrapper
                     .builder(Material.BEDROCK)
-                    .displayName(mm.deserialize("<!i><#FB430A><b>⭐</b> <white>Статическая локация"))
+                    .displayName("<!i><#FB430A><b>⭐</b> <white>Статическая локация")
                     .lore(List.of(
-                            mm.deserialize("<!i><#FB430A><st>=                                   ="),
-                            mm.deserialize("<!i>"+checkColor(vulcan.isStaticLocation())+"● <white>Сейчас: "+check(vulcan.isStaticLocation())),
-                            mm.deserialize(""),
-                            mm.deserialize("<!i><#FB430A><b>▶</b> <white>Нажмите чтобы переключить"),
-                            mm.deserialize("<!i><#FB430A><st>=                                   =")
+                            "<!i><#FB430A><st>=                                   =",
+                            "<!i>"+checkColor(vulcan.isStaticLocation())+"● <white>Сейчас: "+check(vulcan.isStaticLocation()),
+                            "",
+                            "<!i><#FB430A><b>▶</b> <white>Нажмите чтобы переключить",
+                            "<!i><#FB430A><st>=                                   ="
                     ))
                     .build();
 
@@ -177,15 +172,15 @@ public class JMenu extends AdvancedGui implements Listener {
         registerItem("world", builder -> {
             builder.slots(23)
                     .defaultItem(ItemWrapper.builder(Material.PLAYER_HEAD)
-                            .displayName(mm.deserialize("<!i><#FB430A><b>⭐</b> <white>Изменить мир"))
+                            .displayName("<!i><#FB430A><b>⭐</b> <white>Изменить мир")
                             .lore(List.of(
-                                    mm.deserialize("<!i><#FB430A><st>=                                   ="),
-                                    mm.deserialize("<!i><red>ℹ <gray><i>Изменить мир в котором будет спавнится вулкан"),
-                                    mm.deserialize(""),
-                                    mm.deserialize("<!i><green>● <white>Текущий мир: <green>"+vulcan.getSpawnWorld()),
-                                    mm.deserialize(""),
-                                    mm.deserialize("<!i><#FB430A><b>▶</b> <white>Нажмите чтобы настроить"),
-                                    mm.deserialize("<!i><#FB430A><st>=                                   =")
+                                    "<!i><#FB430A><st>=                                   =",
+                                    "<!i><red>ℹ <gray><i>Изменить мир в котором будет спавнится вулкан",
+                                    "",
+                                    "<!i><green>● <white>Текущий мир: <green>"+vulcan.getSpawnWorld(),
+                                    "",
+                                    "<!i><#FB430A><b>▶</b> <white>Нажмите чтобы настроить",
+                                    "<!i><#FB430A><st>=                                   ="
                             ))
                             .build())
                     .defaultClickHandler((event, controller) -> {
@@ -198,17 +193,17 @@ public class JMenu extends AdvancedGui implements Listener {
 
         registerItem("pregenerated", builder -> {
             builder.slots(24).defaultItem(ItemWrapper.builder(Material.GRASS_BLOCK)
-                    .displayName(mm.deserialize("<!i><#FB430A><b>⭐</b> <white>Заранее сгенерированные локации"))
+                    .displayName("<!i><#FB430A><b>⭐</b> <white>Заранее сгенерированные локации")
                     .lore(List.of(
-                            mm.deserialize("<#FB430A><st>=                                   ="),
-                            mm.deserialize("<!i>"+checkColor(vulcan.isUsePreGeneratedLocations())+"● <white>Использовать: "+check(vulcan.isUsePreGeneratedLocations())),
-                            mm.deserialize(""),
-                            mm.deserialize("<!i><#FB430A><b>●</b> <white>Сгенерировано локаций: <#FB430A>"+plugin.getPreLocationGenerator().getLocationsAmount(vulcan.getType())),
-                            mm.deserialize(""),
-                            mm.deserialize("<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Начать поиск 50 локаций"),
-                            mm.deserialize("<!i><#FB430A><b>ПКМ</b> <gray>- <white>Отменить поиск"),
-                            mm.deserialize("<!i><#FB430A><b>СКМ</b> <gray>- <white>Переключить <green>true/<red>false"),
-                            mm.deserialize("<!i><#FB430A><st>=                                   =")
+                            "<#FB430A><st>=                                   =",
+                            "<!i>"+checkColor(vulcan.isUsePreGeneratedLocations())+"● <white>Использовать: "+check(vulcan.isUsePreGeneratedLocations()),
+                            "",
+                            "<!i><#FB430A><b>●</b> <white>Сгенерировано локаций: <#FB430A>"+plugin.getPreLocationGenerator().getLocationsAmount(vulcan.getType()),
+                            "",
+                            "<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Начать поиск 50 локаций",
+                            "<!i><#FB430A><b>ПКМ</b> <gray>- <white>Отменить поиск",
+                            "<!i><#FB430A><b>СКМ</b> <gray>- <white>Переключить <green>true/<red>false",
+                            "<!i><#FB430A><st>=                                   ="
 
                     ))
                     .build());
@@ -219,11 +214,11 @@ public class JMenu extends AdvancedGui implements Listener {
                 switch (event.getClick()) {
                     case LEFT -> {
                         if (!plugin.getPreLocationGenerator().getSessions().contains(player.getUniqueId())) {
-                            player.sendMessage(mm.deserialize("<green>Начинаю искать локации..."));
+                            player.sendMessage("<green>Начинаю искать локации...");
                             plugin.getPreLocationGenerator().getSessions().add(player.getUniqueId());
                             plugin.getPreLocationGenerator().startSearch(player, vulcan.getType(), 50, this);
                         } else {
-                            player.sendMessage(mm.deserialize("<red>У вас уже есть активная сессия поиска локаций"));
+                            player.sendMessage("<red>У вас уже есть активная сессия поиска локаций");
                         }
 
                     }
@@ -231,7 +226,7 @@ public class JMenu extends AdvancedGui implements Listener {
                         if (plugin.getPreLocationGenerator().getSessions().contains(player.getUniqueId())) {
                             plugin.getPreLocationGenerator().getSessions().remove(player.getUniqueId());
                         } else {
-                            player.sendMessage(mm.deserialize("<red>Нечего отменять :/"));
+                            player.sendMessage("<red>Нечего отменять :/");
                         }
                     }
                     case MIDDLE -> {
@@ -241,15 +236,15 @@ public class JMenu extends AdvancedGui implements Listener {
 
                 controller.updateItems(wrapper -> {
                     wrapper.lore(List.of(
-                            mm.deserialize("<#FB430A><st>=                                   ="),
-                            mm.deserialize("<!i>"+checkColor(vulcan.isUsePreGeneratedLocations())+"● <!i><white>Использовать: "+check(vulcan.isUsePreGeneratedLocations())),
-                            mm.deserialize(""),
-                            mm.deserialize("<!i><#FB430A><b>●</b> <white>Сгенерировано локаций: <#FB430A>"+plugin.getPreLocationGenerator().getLocationsAmount(vulcan.getType())),
-                            mm.deserialize(""),
-                            mm.deserialize("<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Начать поиск 50 локаций"),
-                            mm.deserialize("<!i><#FB430A><b>ПКМ</b> <gray>- <white>Отменить поиск"),
-                            mm.deserialize("<!i><#FB430A><b>СКМ</b> <gray>- <white>Переключить <green>true/<red>false"),
-                            mm.deserialize("<!i><#FB430A><st>=                                   =")
+                            "<#FB430A><st>=                                   =",
+                            "<!i>"+checkColor(vulcan.isUsePreGeneratedLocations())+"● <!i><white>Использовать: "+check(vulcan.isUsePreGeneratedLocations()),
+                            "",
+                            "<!i><#FB430A><b>●</b> <white>Сгенерировано локаций: <#FB430A>"+plugin.getPreLocationGenerator().getLocationsAmount(vulcan.getType()),
+                            "",
+                            "<!i><#FB430A><b>ЛКМ</b> <gray>- <white>Начать поиск 50 локаций",
+                            "<!i><#FB430A><b>ПКМ</b> <gray>- <white>Отменить поиск",
+                            "<!i><#FB430A><b>СКМ</b> <gray>- <white>Переключить <green>true/<red>false",
+                            "<!i><#FB430A><st>=                                   ="
                     ));
                 });
             });
@@ -266,7 +261,7 @@ public class JMenu extends AdvancedGui implements Listener {
                     .build());
             builder.defaultClickHandler((event, controller) -> {
                 event.setCancelled(true);
-                player.sendMessage(mm.deserialize("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getMinPlayers()+"]"));
+                player.sendMessage("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getMinPlayers()+"]");
                 onlineEditing.put(player.getUniqueId(), vulcan);
                 close(player);
             });
@@ -282,7 +277,7 @@ public class JMenu extends AdvancedGui implements Listener {
                     .build());
             builder.defaultClickHandler((event, controller) -> {
                 event.setCancelled(true);
-                player.sendMessage(mm.deserialize("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getSpawnRadiusMin()+"]"));
+                player.sendMessage("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getSpawnRadiusMin()+"]");
                 minRadiusEditing.put(player.getUniqueId(), vulcan);
                 close(player);
             });
@@ -298,7 +293,7 @@ public class JMenu extends AdvancedGui implements Listener {
                     .build());
             builder.defaultClickHandler((event, controller) -> {
                 event.setCancelled(true);
-                player.sendMessage(mm.deserialize("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getSpawnRadiusMax()+"]"));
+                player.sendMessage("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getSpawnRadiusMax()+"]");
                 maxRadiusEditing.put(player.getUniqueId(), vulcan);
                 close(player);
             });
@@ -314,7 +309,7 @@ public class JMenu extends AdvancedGui implements Listener {
                     .build());
             builder.defaultClickHandler((event, controller) -> {
                 event.setCancelled(true);
-                player.sendMessage(mm.deserialize("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getActivation()+"]"));
+                player.sendMessage("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getActivation()+"]");
                 activation.put(player.getUniqueId(), vulcan);
                 close(player);
             });
@@ -329,7 +324,7 @@ public class JMenu extends AdvancedGui implements Listener {
                     .build());
             builder.defaultClickHandler((event, controller) -> {
                 event.setCancelled(true);
-                player.sendMessage(mm.deserialize("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getDuration()+"]"));
+                player.sendMessage("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getDuration()+"]");
                 duration.put(player.getUniqueId(), vulcan);
                 close(player);
             });
@@ -344,7 +339,7 @@ public class JMenu extends AdvancedGui implements Listener {
                     .build());
             builder.defaultClickHandler((event, controller) -> {
                 event.setCancelled(true);
-                player.sendMessage(mm.deserialize("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getRegionSize()+"]"));
+                player.sendMessage("<gray>→ <white>Введите значение в чат <gray>[Текущее значение: "+vulcan.getRegionSize()+"]");
                 region.put(player.getUniqueId(), vulcan);
                 close(player);
             });

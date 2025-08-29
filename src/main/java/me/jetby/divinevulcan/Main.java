@@ -46,7 +46,6 @@ public final class Main extends JavaPlugin {
     @Setter private PreLocationGenerator preLocationGenerator;
     @Setter private BossBar bossBar;
     @Setter private License license;
-
     @Setter private boolean pluginEnabled = false;
 
     @Override
