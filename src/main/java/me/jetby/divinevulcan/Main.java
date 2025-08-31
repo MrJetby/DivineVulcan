@@ -44,12 +44,16 @@ public final class Main extends JavaPlugin {
     @Setter private LocationGenerator locationGenerator;
     @Setter private PreLocationGenerator preLocationGenerator;
     @Setter private BossBar bossBar;
-    @Setter private boolean pluginEnabled = false;
 
     @Override
     public void onEnable() {
 
-        pluginEnabled = false;
+
+        Logger.success("Looking for updates..");
+        Version version = new Version(this);
+        for (String str : version.getAlert()) {
+            Logger.success(str);
+        }
 
         JGuiInitializer.init(this);
 
@@ -148,7 +152,6 @@ public final class Main extends JavaPlugin {
         }
 
         if (dependencyCount == 4) {
-            pluginEnabled = true;
             Logger.success("✔ Все зависимости подключены!");
         } else {
             Logger.warn("");
