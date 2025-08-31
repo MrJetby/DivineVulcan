@@ -49,17 +49,20 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
 
 
-        Logger.success("Looking for updates..");
-        Version version = new Version(this);
-        for (String str : version.getAlert()) {
-            Logger.success(str);
-        }
+
 
         JGuiInitializer.init(this);
 
         cfg = new Config();
         cfg.load(getFileConfiguration( "config.yml"));
 
+        if (cfg.isCheckForUpdate()) {
+            Logger.success("Looking for updates..");
+            Version version = new Version(this);
+            for (String str : version.getAlert()) {
+                Logger.success(str);
+            }
+        }
         items = new Items(getFile("items.yml"));
         items.load();
 
