@@ -7,11 +7,7 @@ import me.jetby.divinevulcan.Vulcan;
 import me.jetby.divinevulcan.configurations.Config;
 import me.jetby.divinevulcan.configurations.Items;
 import me.jetby.divinevulcan.configurations.Vulcans;
-import me.jetby.divinevulcan.utils.AutoStart;
-import me.jetby.divinevulcan.utils.BossBar;
-import me.jetby.divinevulcan.utils.FormatTime;
-import me.jetby.divinevulcan.utils.Logger;
-import org.bukkit.Bukkit;
+import me.jetby.divinevulcan.utils.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static me.jetby.divinevulcan.Main.activeVulcans;
-import static me.jetby.divinevulcan.utils.Hex.hex;
 
 public class AdminCommands implements CommandExecutor, TabCompleter {
 
@@ -34,18 +29,16 @@ public class AdminCommands implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
-        if (!plugin.getLicense().getMashonka().equalsIgnoreCase("JUST_BELIEVE_ME_THAT_WORKS_BRO")) {
-            return true;
-        }
+
 
         if (args.length==0) {
 
 
                 if (sender instanceof Player p) {
-                    p.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &6/" + cmd.getName() + " menu &7- &fНастроить предметы"));
-                    p.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &6/" + cmd.getName() + " start <id> &7- &fНачать ивент"));
-                    p.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &6/" + cmd.getName() + " tp <id> &7- &fТелепорт на активный ивент"));
-                    p.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &6/" + cmd.getName() + " stop <id> &7- &fЗавершить активный ивент"));
+                    p.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &6/" + cmd.getName() + " menu &7- &fНастроить предметы"));
+                    p.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &6/" + cmd.getName() + " start <id> &7- &fНачать ивент"));
+                    p.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &6/" + cmd.getName() + " tp <id> &7- &fТелепорт на активный ивент"));
+                    p.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &6/" + cmd.getName() + " stop <id> &7- &fЗавершить активный ивент"));
                 }
 
 
@@ -58,15 +51,13 @@ public class AdminCommands implements CommandExecutor, TabCompleter {
             plugin.getBossBar().show(args[1], new ArrayList<>(List.of( sender )));
             return true;
         }
-        if (!plugin.getLicense().getMashonka().equalsIgnoreCase("JUST_BELIEVE_ME_THAT_WORKS_BRO")) {
-            return true;
-        }
+
         if (args[0].equalsIgnoreCase("tp")) {
                 if (sender instanceof Player player) {
                     if (!player.hasPermission("divinevulcan.admin")) return true;
 
                     if (args.length != 2) {
-                        sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &fУкажите имя &6/" + cmd.getName() + " tp <id>"));
+                        sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &fУкажите имя &6/" + cmd.getName() + " tp <id>"));
                         return true;
                     }
                     String name = args[1];
@@ -74,11 +65,11 @@ public class AdminCommands implements CommandExecutor, TabCompleter {
 
 
                     if (block == null) {
-                        sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &7Данный тип не найден"));
+                        sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &7Данный тип не найден"));
                         return true;
                     }
                     if (block.getLocation() == null) {
-                        sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &fПодождите, я ищу локацию..."));
+                        sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &fПодождите, я ищу локацию..."));
                         return true;
                     }
 
@@ -93,28 +84,29 @@ public class AdminCommands implements CommandExecutor, TabCompleter {
         if (args[0].equalsIgnoreCase("start")) {
                 if (!sender.hasPermission("divinevulcan.admin")) return true;
                 if (args.length < 2) {
-                    sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &fУкажите имя &6/" + cmd.getName() + " start <id>"));
+                    sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &fУкажите имя &6/" + cmd.getName() + " start <id>"));
                     return true;
                 }
 
                 String name = args[1];
                 if (!plugin.getVulcans().getVulcans().containsKey(name)) {
-                    sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &7Ивент с таким названием не найден."));
+                    sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &7Ивент с таким названием не найден."));
                     return true;
                 }
                 if (activeVulcans.containsKey(name)) {
-                    sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &7Ивент уже активен."));
+                    sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &7Ивент уже активен."));
                     return true;
                 }
                 Vulcan block = activeVulcans.get(name);
                 if (block!=null && block.getLocation() == null) {
-                    sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &fПодождите, я ищу локацию..."));
+                    sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &fПодождите, я ищу локацию..."));
                     return true;
                 }
 
 
-                sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &7Попытаюсь вызвать ивент..."));
+                sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &7Попытаюсь вызвать ивент..."));
                 Vulcan vulcan = plugin.getVulcans().getVulcans().get(name);
+                vulcan.start();
                 activeVulcans.put(name, vulcan);
 
                 return true;
@@ -129,19 +121,17 @@ public class AdminCommands implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if (!plugin.getLicense().getMashonka().equalsIgnoreCase("JUST_BELIEVE_ME_THAT_WORKS_BRO")) {
-            return true;
-        }
+
         if (args[0].equals("stop")) {
                 if (!sender.hasPermission("divinevulcan.admin")) return true;
                 if (args.length != 2) {
-                    sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &fУкажите имя &6/" + cmd.getName() + " stop <id>"));
+                    sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &fУкажите имя &6/" + cmd.getName() + " stop <id>"));
                     return true;
                 }
                 String name = args[1];
                 Vulcan block = activeVulcans.get(name);
                 if (block == null) {
-                    sender.sendMessage(hex("&#FB3D14&lDivineVulcan &7» &7Данный тип не найден"));
+                    sender.sendMessage(TextUtil.colorize("&#FB3D14&lDivineVulcan &7» &7Данный тип не найден"));
                     return true;
                 }
                 block.stop();
@@ -170,11 +160,7 @@ public class AdminCommands implements CommandExecutor, TabCompleter {
                 items.load();
                 plugin.setItems(items);
 
-                if (Bukkit.getPluginManager().getPlugin("TreexStudio") == null) {
-                    Logger.error("Плагин TreexStudio не был найден, плагин не может без него работать");
-                    plugin.setPluginEnabled(false);
-                    return true;
-                }
+
                 PreLocationGenerator preLocationGenerator = new PreLocationGenerator(plugin, plugin.getFile("locations.yml"));
                 preLocationGenerator.load();
                 plugin.setPreLocationGenerator(preLocationGenerator);

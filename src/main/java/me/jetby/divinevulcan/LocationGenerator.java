@@ -95,8 +95,8 @@ public class LocationGenerator {
         return true;
     }
     public boolean isSuitableFlat(Location center, int radius) {
-        int maxDiff = 3;
-        int requiredClearance = 2;
+        int maxDiff = 0;
+        int requiredClearance = radius;
         return checkFlatSurface(center, radius, maxDiff, requiredClearance);
     }
 
@@ -104,7 +104,7 @@ public class LocationGenerator {
     @Nullable
     public Location getRandomLocation(Vulcan vulcan) {
 
-        World world = Bukkit.getWorld(vulcan.getSpawnWorld());
+        World world = vulcan.getSpawnWorld();
         Set<Material> materials = vulcan.getMaterialSet();
         int minRadius = vulcan.getSpawnRadiusMin();
         int maxRadius = vulcan.getSpawnRadiusMax();

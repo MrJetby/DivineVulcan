@@ -7,6 +7,7 @@ import me.jetby.divinevulcan.utils.Logger;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -74,7 +75,7 @@ public class Vulcans {
                     try { config.save(typeFile); } catch (IOException e) { Logger.warn("Не удалось сохранить +"+type+"\n" + e); }
 
                     config.set("static-location.enable", vulcan.isStaticLocation());
-                    config.set("spawn-world", vulcan.getSpawnWorld());
+                    config.set("spawn-world", vulcan.getSpawnWorld().getName());
                     config.set("minPlayers", vulcan.getMinPlayers());
                     config.set("spawn-radius-min", vulcan.getSpawnRadiusMin());
                     config.set("spawn-radius-max", vulcan.getSpawnRadiusMax());
@@ -97,7 +98,7 @@ public class Vulcans {
                 try { config.save(typeFile); } catch (IOException e) { Logger.warn("Не удалось сохранить +"+type+"\n" + e); }
 
                 config.set("static-location.enable", vulcan.isStaticLocation());
-                config.set("spawn-world", vulcan.getSpawnWorld());
+                config.set("spawn-world", vulcan.getSpawnWorld().getName());
                 config.set("minPlayers", vulcan.getMinPlayers());
                 config.set("spawn-radius-min", vulcan.getSpawnRadiusMin());
                 config.set("spawn-radius-max", vulcan.getSpawnRadiusMax());
@@ -150,7 +151,7 @@ public class Vulcans {
 
             List<String> hologramLines = config.getStringList("hologram");
             List<String> hologramActivatedLines = config.getStringList("hologram-activated");
-            String spawnWorld = config.getString("spawn-world");
+            World spawnWorld = Bukkit.getWorld(config.getString("spawn-world", "world"));
             int spawnRadiusMin = config.getInt("spawn-radius-min");
             int spawnRadiusMax = config.getInt("spawn-radius-max");
             double radius = config.getDouble("radius");
@@ -160,17 +161,19 @@ public class Vulcans {
             Map<String, BossBars> bossBarsMap = new HashMap<>();
 
             ConfigurationSection bossBars = config.getConfigurationSection("bossBars");
-            for (String bossBarId : bossBars.getKeys(false)) {
-                ConfigurationSection bossBar = bossBars.getConfigurationSection(bossBarId);
-                String bossBarTitle = bossBar.getString("title", "");
-                int bossBarDuration = bossBar.getInt("duration", -1);
+            if (bossBars!=null) {
+                for (String bossBarId : bossBars.getKeys(false)) {
+                    ConfigurationSection bossBar = bossBars.getConfigurationSection(bossBarId);
+                    String bossBarTitle = bossBar.getString("title", "");
+                    int bossBarDuration = bossBar.getInt("duration", -1);
 
-                BossBar.Color bossBarColor = BossBar.Color.valueOf(bossBar.getString("Color", "BLUE"));
-                BossBar.Overlay bossBarStyle = BossBar.Overlay.valueOf(bossBar.getString("Style", "PROGRESS"));
+                    BossBar.Color bossBarColor = BossBar.Color.valueOf(bossBar.getString("Color", "BLUE"));
+                    BossBar.Overlay bossBarStyle = BossBar.Overlay.valueOf(bossBar.getString("Style", "PROGRESS"));
 
-                bossBarsMap.put(bossBarId, new BossBars(bossBarId, bossBarTitle, bossBarColor, bossBarStyle, bossBarDuration ));
-                Logger.info("true -"+bossBarId);
+                    bossBarsMap.put(bossBarId, new BossBars(bossBarId, bossBarTitle, bossBarColor, bossBarStyle, bossBarDuration ));
+                }
             }
+
 
 
             ConfigurationSection particle = config.getConfigurationSection("particle");
@@ -191,7 +194,20 @@ public class Vulcans {
             List<String> flags = config.getStringList("region.flags");
 
             boolean schem = config.getBoolean("schem.enable", false);
-            String schemFile = config.getString("schem.file");
+            String schematicFileName = config.getString("schem.file");
+            File schemFile = null;
+            if (schem) {
+                if (schematicFileName==null) {
+                    Logger.error("Schematic was not found by path: /schematic/");
+                    return;
+                }
+                try {
+                    schemFile = new File(plugin.getDataFolder() + "/schematics", schematicFileName);
+                } catch (Exception e) {
+                    Logger.error("Error: "+e.getMessage());
+                }
+            }
+
             boolean schemIgnoreAirBlocks = config.getBoolean("schem.ignore-air-blocks", false);
             int schemOffsetX = config.getInt("schem.offsets-x", 0);
             int schemOffsetY = config.getInt("schem.offsets-y", 0);

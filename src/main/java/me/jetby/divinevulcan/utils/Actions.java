@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static me.jetby.divinevulcan.Main.activeVulcans;
-import static me.jetby.divinevulcan.utils.Hex.hex;
 
 public class Actions {
     private final Main plugin;
@@ -91,7 +90,7 @@ public class Actions {
                 break;
             case "[MSG]", "[MESSAGE]", "[MESSAGE_ALL]", "[MSG_ALL]":
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    player.sendMessage(hex(withoutCMD));
+                    player.sendMessage(TextUtil.colorize(withoutCMD));
                 }
                 break;
 
@@ -99,7 +98,7 @@ public class Actions {
                 double msgRadius = getRadiusFromArgs(args);
                 for (Player player : location.getWorld().getPlayers()) {
                     if (player.getLocation().distance(location) <= msgRadius) {
-                        player.sendMessage(hex(withoutCMD.replace("--radius:" + (int) msgRadius, "").trim()));
+                        player.sendMessage(TextUtil.colorize(withoutCMD.replace("--radius:" + (int) msgRadius, "").trim()));
                     }
                 }
                 break;
@@ -121,7 +120,7 @@ public class Actions {
                 break;
 
             case "[CONSOLE]":
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), hex(withoutCMD));
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), TextUtil.colorize(withoutCMD));
                 break;
 
             case "[DROP]":
@@ -222,7 +221,7 @@ public class Actions {
                 fadeOut = Integer.parseInt(arg.replace("-fadeOut:", ""));
             }
         }
-        String[] parts = hex(message).split(";");
+        String[] parts = TextUtil.colorize(message).split(";");
         String title = parts.length > 0 ? parts[0] : "";
         String sub = parts.length > 1 ? parts[1] : "";
         player.sendTitle(title, sub, fadeIn * 20, stay * 20, fadeOut * 20);

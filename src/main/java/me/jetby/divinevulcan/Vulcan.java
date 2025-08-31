@@ -4,6 +4,7 @@ import lombok.*;
 import me.jetby.divinevulcan.configurations.BossBars;
 import me.jetby.divinevulcan.configurations.Items;
 import me.jetby.divinevulcan.configurations.Vulcans;
+import me.jetby.divinevulcan.utils.TextUtil;
 import me.jetby.divinevulcan.utils.UtilHologram;
 import me.jetby.divinevulcan.worldGuardHook.WGHook;
 import org.bukkit.*;
@@ -17,10 +18,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.util.*;
 
 import static me.jetby.divinevulcan.Main.activeVulcans;
-import static me.jetby.divinevulcan.utils.Hex.hex;
 import static me.jetby.divinevulcan.worldGuardHook.WGHook.removeRegion;
 
 @Getter @Setter
@@ -42,7 +43,7 @@ public class Vulcan {
     private final List<String> onEndEvents;
     private final List<String> hologramLines;
     private final List<String> hologramActivatedLines;
-    private String spawnWorld;
+    private World spawnWorld;
     private int spawnRadiusMin;
     private int spawnRadiusMax;
 
@@ -66,7 +67,7 @@ public class Vulcan {
     private final List<String> flags;
 
     private final boolean schem;
-    private final String schemFile;
+    private final @Nullable File schemFile;
     private final boolean schemIgnoreAirBlocks;
     private final int schemOffsetX;
     private final int schemOffsetY;
@@ -144,16 +145,13 @@ public class Vulcan {
 
         spawnLocation = new Location(generateLoc.getWorld(),
                 generateLoc.getX(),
-                generateLoc.getY() + plugin.getSchematic().getMaxY(schemFile)-1,
+                generateLoc.getY()+plugin.getSchematic().getMaxY(schemFile)-1,
                 generateLoc.getZ());
 
         if (schem) {
             plugin.getSchematic().pasteSchematicAdvanced(spawnLocation,
                     schemFile,
-                    schemIgnoreAirBlocks,
-                    schemOffsetX,
-                    schemOffsetY,
-                    schemOffsetZ);
+                    this);
         }
 
         if (region) {
@@ -181,11 +179,20 @@ public class Vulcan {
     }
 
     public void stop() {
-        if (activationTask != null) activationTask.cancel();
-        if (startTask != null) startTask.cancel();
-        if (particleTask != null) particleTask.cancel();
+        if (activationTask != null) {
+            activationTask.cancel();
+            activationTask = null;
+        }
+        if (startTask != null) {
+            startTask.cancel();
+            startTask = null;
+        }
+        if (particleTask != null) {
+            particleTask.cancel();
+            particleTask = null;
+        }
 
-        plugin.getSchematic().undoSchematic(getLocation());
+        plugin.getSchematic().undoSchematic(this);
         clearHologram();
 
         for (String id : bossBarsMap.keySet()) {
@@ -196,7 +203,6 @@ public class Vulcan {
         plugin.getActions().execute(type, spawnLocation, onEndEvents, this);
 
         removeRegion(spawnLocation);
-
 
         activeVulcans.remove(type, this);
     }
@@ -302,7 +308,7 @@ public class Vulcan {
             ItemStack maskedItem = new ItemStack(randomMask.material());
             ItemMeta meta = maskedItem.getItemMeta();
             if (meta != null) {
-                meta.setDisplayName(hex(randomMask.name()));
+                meta.setDisplayName(TextUtil.colorize(randomMask.name()));
                 if (randomMask.enchanted()) {
                     meta.addEnchant(Enchantment.KNOCKBACK, 1, true);
                 }

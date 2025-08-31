@@ -2,8 +2,7 @@ package me.jetby.divinevulcan.configurations;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.jetby.divinevulcan.utils.Hex;
-import org.bukkit.configuration.ConfigurationSection;
+import me.jetby.divinevulcan.utils.TextUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ public class Config {
     private String licenseKey;
 
     private boolean debug;
-    private boolean metrics;
     private boolean checkForUpdate;
 
     private String autoStartType;
@@ -40,7 +38,6 @@ public class Config {
 
         licenseKey = configuration.getString("license.key", "NONE");
         debug = configuration.getBoolean("debug");
-        metrics = configuration.getBoolean("metrics");
         checkForUpdate = configuration.getBoolean("check-for-update");
 
         autoStartType = configuration.getString("AutoStart.type", "TIMER").toUpperCase();
@@ -70,8 +67,8 @@ public class Config {
 
     private List<String> getOrDefaultList(FileConfiguration config, String path, List<String> defaultValue) {
         List<String> list = config.getStringList(path);
-        defaultValue.replaceAll(Hex::hex);
-        list.replaceAll(Hex::hex);
+        defaultValue.replaceAll(TextUtil::colorize);
+        list.replaceAll(TextUtil::colorize);
         return list.isEmpty() ? defaultValue : list;
     }
 

@@ -124,7 +124,7 @@
         <dependency>
             <groupId>com.jodexindustries.jguiwrapper</groupId>
             <artifactId>common</artifactId>
-            <version>1.0.0.5</version>
+            <version>1.0.0.6</version>
         </dependency>
     </dependencies>
 </project>

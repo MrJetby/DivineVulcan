@@ -1,6 +1,7 @@
 package me.jetby.divinevulcan.gui;
 
 import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
+import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.divinevulcan.Main;
 import me.jetby.divinevulcan.configurations.Items;
@@ -31,11 +32,7 @@ public class ChanceEdit extends AdvancedGui {
         this.type = type;
         this.inv = inv;
         this.plugin = plugin;
-
-        if (!plugin.isPluginEnabled()) {
-            title("<red>Ошибка лицензии!");
-            return;
-        }
+        defaultSerializer = SerializerType.MINI_MESSAGE;
 
         List<Items.ItemsData> itemMap = items.getData().get(type);
         for (Items.ItemsData itemData : itemMap) {

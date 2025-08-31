@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.jetby.divinevulcan.gui.JMenu;
 import me.jetby.divinevulcan.utils.LocationHandler;
 import me.jetby.divinevulcan.utils.Logger;
+import me.jetby.divinevulcan.utils.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static me.jetby.divinevulcan.utils.Hex.hex;
 
 @Getter
 public class PreLocationGenerator {
@@ -55,7 +55,7 @@ public class PreLocationGenerator {
         for (int i = 1; i <= amount; i++) {
 
             if (!sessions.contains(player.getUniqueId())) {
-                player.sendMessage(hex("&cПоиск локаций отменена"));
+                player.sendMessage(TextUtil.colorize("&cПоиск локаций отменена"));
                 break;
             }
 
@@ -64,20 +64,20 @@ public class PreLocationGenerator {
                         getRandomLocation(vulcan);
 
                 if (locationList.contains(location)) {
-                    player.sendMessage(hex("&cНеудачно. (Локация уже сохранена) "+i));
+                    player.sendMessage(TextUtil.colorize("&cНеудачно. (Локация уже сохранена) "+i));
                     continue;
                 }
                 if (location==null) {
-                    player.sendMessage(hex("&cНеудачно. (Локация вернула null) "+i));
+                    player.sendMessage(TextUtil.colorize("&cНеудачно. (Локация вернула null) "+i));
                     continue;
                 }
                 for (Location loc : locationList) {
                     if (location.distance(loc)>vulcan.getRegionSize()) continue;
-                    player.sendMessage(hex("&cНеудачно. (Дистанция локации задевает одну из существующих)"+i));
+                    player.sendMessage(TextUtil.colorize("&cНеудачно. (Дистанция локации задевает одну из существующих)"+i));
                 }
 
                 locationList.add(location);
-                player.sendMessage(hex("&aУдачно. "+i));
+                player.sendMessage(TextUtil.colorize("&aУдачно. "+i));
                 jMenu.getController("pregenerated").get().updateItemWrappers(wrapper -> {
                     wrapper.lore(List.of(
                             "<#FB430A><st>=                                   =",

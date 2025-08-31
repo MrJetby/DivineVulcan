@@ -1,9 +1,5 @@
 
-metrics: true
 check-for-update: true
-
-license:
-  key: 'ВСТАВЬТЕ_СЮДА_ВАШУ_ЛИЦЕНЗИЮ'
 
 
 AutoStart:

@@ -2,6 +2,7 @@ package me.jetby.divinevulcan.gui;
 
 
 import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
+import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.divinevulcan.Main;
 import me.jetby.divinevulcan.configurations.Items;
@@ -14,16 +15,9 @@ import java.util.*;
 
 public class InvEdit extends AdvancedGui {
 
-    private final Items items;
     public InvEdit(Player player, String type, Items items, Main plugin) {
         super("Выбор инвентаря");
-
-        this.items = items;
-
-        if (!plugin.isPluginEnabled()) {
-            title("Ошибка лицензии!");
-            return;
-        }
+        defaultSerializer = SerializerType.MINI_MESSAGE;
 
         Set<String> invs = new HashSet<>();
         List<Items.ItemsData> itemsData = items.getData().get(type);
@@ -83,35 +77,7 @@ public class InvEdit extends AdvancedGui {
             });
         });
 
-//        onClose(event -> {
-//            checkAndRemoveEmptyInvs(type);
-//        });
     }
 
 
-
-    private void checkAndRemoveEmptyInvs(String type) {
-        List<Items.ItemsData> itemsData = items.getData().get(type);
-        if (itemsData == null) return;
-
-        Map<String, List<Items.ItemsData>> invMap = new HashMap<>();
-        for (Items.ItemsData data : itemsData) {
-            invMap.computeIfAbsent(data.inv(), k -> new ArrayList<>()).add(data);
-        }
-
-        for (Map.Entry<String, List<Items.ItemsData>> entry : invMap.entrySet()) {
-            boolean isEmpty = true;
-            for (Items.ItemsData data : entry.getValue()) {
-                if (data.itemStack() != null) {
-                    isEmpty = false;
-                    break;
-                }
-            }
-            if (isEmpty) {
-                for (Items.ItemsData data : entry.getValue()) {
-                    items.removeItem(type, entry.getKey(), data.slot());
-                }
-            }
-        }
-    }
 }

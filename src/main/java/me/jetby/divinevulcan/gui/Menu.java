@@ -1,6 +1,7 @@
 package me.jetby.divinevulcan.gui;
 
 import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
+import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import me.jetby.divinevulcan.Main;
 import me.jetby.divinevulcan.Vulcan;
@@ -20,6 +21,8 @@ public class Menu extends AdvancedGui {
     public Menu(Main plugin) {
         super("DivineVulcan by TreexStudio");
 
+        defaultSerializer = SerializerType.LEGACY_AMPERSAND;
+
         int slot = 0;
         for (String type : plugin.getVulcans().getVulcans().keySet()) {
             int finalSlot = slot;
@@ -27,13 +30,13 @@ public class Menu extends AdvancedGui {
                 builder.slots(finalSlot);
 
                 builder.defaultItem(ItemWrapper.builder(Material.BARREL)
-                        .displayName("<!i><#FB430A><bold>⭐</bold> <white>Вулкан: <yellow>" + type)
+                        .displayName("&#FB430A&l⭐ &fВулкан: &e" + type)
                         .lore(List.of(
-                                "<!i><#FB430A><bold><st>=<#FB4C0E>                                   <st>=",
+                                "&#FB430A&m=                                   &m=",
                                 "",
-                                "<!i> <#FB430A><bold>ЛКМ</bold> <gray>- <white>Настроить вулкан ",
+                                "&#FB430A&lЛКМ &7- &fНастроить вулкан ",
                                 "",
-                                "<!i><#FB430A><bold><st>=<#FB4C0E>                                   <st>="
+                                "&#FB430A&m=                                   &m="
                                 ))
                         .build());
 

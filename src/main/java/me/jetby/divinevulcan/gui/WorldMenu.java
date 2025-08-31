@@ -1,6 +1,7 @@
 package me.jetby.divinevulcan.gui;
 
 import com.jodexindustries.jguiwrapper.api.item.ItemWrapper;
+import com.jodexindustries.jguiwrapper.api.text.SerializerType;
 import com.jodexindustries.jguiwrapper.gui.advanced.AdvancedGui;
 import com.jodexindustries.jguiwrapper.gui.advanced.GuiItemController;
 import me.jetby.divinevulcan.Main;
@@ -18,6 +19,7 @@ public class WorldMenu extends AdvancedGui {
     public WorldMenu(Player player, Vulcan vulcan, Main plugin) {
 
         super("&0Выбор мира");
+        defaultSerializer = SerializerType.LEGACY_AMPERSAND;
 
         onClose(event -> {
             JMenu menu = new JMenu(player, vulcan, plugin, plugin.getItems());
@@ -32,7 +34,7 @@ public class WorldMenu extends AdvancedGui {
 
                 ItemWrapper item = ItemWrapper.builder(getMaterial(world))
                         .displayName(world.getName())
-                        .enchanted(vulcan.getSpawnWorld().equalsIgnoreCase(world.getName()))
+                        .enchanted(vulcan.getSpawnWorld().getName().equalsIgnoreCase(world.getName()))
                         .build();
 
                 item.itemStack().addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -40,8 +42,8 @@ public class WorldMenu extends AdvancedGui {
                 builder.slots(finalI);
                 builder.defaultClickHandler((event, controller) -> {
                     event.setCancelled(true);
-                    if (!vulcan.getSpawnWorld().equalsIgnoreCase(world.getName())) {
-                        vulcan.setSpawnWorld(world.getName());
+                    if (!vulcan.getSpawnWorld().getName().equalsIgnoreCase(world.getName())) {
+                        vulcan.setSpawnWorld(world);
                         controller.updateItemWrappers(updater -> {
                             item.enchanted(true);
                             item.itemStack().addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -51,7 +53,7 @@ public class WorldMenu extends AdvancedGui {
                         guiItemController.updateItemWrappers(itemWrapper -> {
                             TextComponent textComponent = (TextComponent) itemWrapper.displayName();
 
-                            if (!vulcan.getSpawnWorld().equalsIgnoreCase(textComponent.content())) {
+                            if (!vulcan.getSpawnWorld().getName().equalsIgnoreCase(textComponent.content())) {
                                 itemWrapper.enchanted(false);
                             }
                         });

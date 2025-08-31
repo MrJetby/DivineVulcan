@@ -13,7 +13,6 @@ import me.jetby.divinevulcan.gui.Menu;
 import me.jetby.divinevulcan.listeners.ItemPickup;
 import me.jetby.divinevulcan.utils.*;
 import me.jetby.divinevulcan.worldGuardHook.Schematic;
-import net.kyori.adventure.Adventure;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -45,7 +44,6 @@ public final class Main extends JavaPlugin {
     @Setter private LocationGenerator locationGenerator;
     @Setter private PreLocationGenerator preLocationGenerator;
     @Setter private BossBar bossBar;
-    @Setter private License license;
     @Setter private boolean pluginEnabled = false;
 
     @Override
@@ -61,35 +59,6 @@ public final class Main extends JavaPlugin {
         items = new Items(getFile("items.yml"));
         items.load();
 
-        if (Bukkit.getPluginManager().getPlugin("TreexStudio") == null) {
-            Logger.error("Плагин TreexStudio не был найден, плагин не может без него работать");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-        license = new License(this);
-        Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+"-------> Login <-------");
-        if (license.isValid()) {
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+" §c✖ Мне кажется вы пытаетесь крякнуть плагин :/");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-        try {
-            Class.forName("me.jetby.divinevulcan.utils.License");
-        } catch (ClassNotFoundException e) {
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+" §c✖ Мне кажется вы пытаетесь крякнуть плагин :/");
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+" ");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        if (license.request(cfg.getLicenseKey())) {
-            if (!getLicense().getMashonka().equalsIgnoreCase("JUST_BELIEVE_ME_THAT_WORKS_BRO")) {
-                return;
-            }
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+" §a✔ Лицензия действительна ");
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+" ");
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+"-----------------------");
-
             if (!checkDependencies()) {
                 Bukkit.getPluginManager().disablePlugin(this);
                 return;
@@ -100,7 +69,7 @@ public final class Main extends JavaPlugin {
 
             locationGenerator = new LocationGenerator(this, preLocationGenerator);
 
-            if (cfg.isMetrics()) new Metrics(this, 25221);
+            new Metrics(this, 25221);
 
             getCommand("divinevulcan").setExecutor(new AdminCommands(this));
 
@@ -125,23 +94,6 @@ public final class Main extends JavaPlugin {
             formatTime = new FormatTime(this);
 
             bossBar = new BossBar(this);
-
-
-            Bukkit.getScheduler().runTaskTimer(this, this::tick, 0, 20);
-        } else {
-
-            getLogger().info("");
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+" §c"+license.getReturn());
-            getLogger().info("");
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+" §eЕсли вы не смогли решить проблему самостоятельно,");
-            Bukkit.getConsoleSender().sendMessage("["+getName()+"]"+" §eтогда обратитесь к нам: §bhttps://dsc.gg/treexstudio");
-            getLogger().info("------------------------");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
-
-
-
     }
 
     public FileConfiguration getFileConfiguration(String fileName) {
@@ -160,9 +112,6 @@ public final class Main extends JavaPlugin {
         return file;
     }
 
-    private void tick() {
-        activeVulcans.values().forEach(Vulcan::start);
-    }
 
     private boolean checkDependencies() {
 
